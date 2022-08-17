@@ -16,27 +16,34 @@ public class SinglyLinkedList {
 	 */
 	
 	private static class Node {
+		//node일 때는 안되고 this일 때 되는 이유 찾기.
 		private int data;	// Node에서 저장하는 data
 		private Node next;	// Node가 가리키고 있는 다음 노드
 		
 		/* [필수] 생성자 */
 		public Node(int d) {
 			// 구현
+			data = d;
+			next = null;
 		}
 		
 		/* [필수] getData() */
 		public int getData() {
 			// 구현
+			return this.data;
 		}
 		
 		/* [필수] getNext() */
 		public Node getNext() {
 			// 구현
+			return this.next;
 		}
 		
 		/* [필수] setNext() */
 		public void setNext(Node n) {
 			// 구현
+			this.next = n;
+			return;
 		}
 	}
 	
@@ -52,7 +59,7 @@ public class SinglyLinkedList {
 	 *     - addFirst(): linked list의 맨 앞에 데이터를 추가
 	 *     - addLast(): linked list의 맨 뒤에 데이터를 추가
 	 *   3) 추가 operation
-	 *     - removeFirst(): linked list의 맨 앞의 노드를 삭제
+	 *     - removeFirst(): linked list의 맨 앞의 노드를 삭제(메모리 해제 필수!)
 	 *     - printList(): linked list의 모든 데이터를 출력
 	 */
 	
@@ -60,19 +67,28 @@ public class SinglyLinkedList {
 	private Node tail;	// data의 마지막 부분을 가리키는 노드
 	private int size;	// 리스트의 크기를 출력하는 노드 (필요시 사용)
 	
-	/* [필수] 생성자 */
+	/* [필수] 생성자
+	* DUMMY로 구현하*/
+
 	public SinglyLinkedList() {
 		// 구현
+
+		this.head = new Node(-1);
+		this.tail = new Node(-1);
+		this.size = 0;
 	}
 	
 	/* 필요시 구현 */
+	//this.size와 size()의 차이점.
 	public int size() {
 		// 구현
+		return this.size;
 	}
 	
 	/* 필요시 구현 */
 	public boolean isEmpty() {
 		// 구현
+		return (this.size == 0);
 	}
 	
 	/* 
@@ -82,24 +98,49 @@ public class SinglyLinkedList {
 	 */
 	public int getFirst() {
 		// 구현
+		return this.head.data;
 	}
 	
 	/* [필수] getLast() */
 	public int getLast() {
 		// 구현
+		return this.tail.data;
 	}
 	
 	/* 
 	 * [필수] addFirst()
-	 *   - 데이터를 입력받아서 추가
+	 *  o(1)
 	 */
 	public void addFirst(int data) {
 		// 구현
+		// NEW NODE ->
+		Node newNode = new Node(data);
+		if(size() == 0){
+			head.setNext(newNode);
+			newNode.setNext(tail);
+		}else{
+			newNode.setNext(head.getNext());
+			head.setNext(newNode);
+		}
+		size++;
 	}
 	
-	/* [필수] addLast() */
+	/* [필수] addLast() O(N) */
 	public void addLast(int data) {
 		// 구현
+		Node newNode = new Node(data);
+		if(size() == 0){
+			head.setNext(newNode);
+			newNode.setNext(tail);
+		}else{
+			newNode.setNext(tail);
+			Node curnode = head;
+			while(curnode.getNext() != tail){
+				curnode = curnode.getNext();
+			}
+			curnode.setNext(newNode);
+		}
+		size++;
 	}
 	
 	/*
@@ -109,6 +150,15 @@ public class SinglyLinkedList {
 	 */
 	public int removeFirst() {
 		// 구현
+		if (size() == 0) {
+			return -1;
+		}
+		// r에는 참조가 아닌 데이터가 저장되는가?
+		Node remNode = head.next;
+		int r = remNode.data;
+		head.setNext(head.next.getNext());
+		remNode = null;
+		return r;
 	}
 	
 	/*
@@ -118,5 +168,10 @@ public class SinglyLinkedList {
 	 */
 	public void printList() {
 		// 구현
+		Node r = head;
+		for(int i = 0; i<size(); i++){
+			r = r.getNext();
+			System.out.println(r);
+		}
 	}
 }
