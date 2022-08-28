@@ -1,7 +1,7 @@
 package linked_list;
 
 public class SinglyLinkedList {
-	
+	//head, tail dummy로 했을 때의 문제점 고치기.
 	/*
 	 * [Class] Node
 	 *   1) 개요
@@ -72,7 +72,6 @@ public class SinglyLinkedList {
 
 	public SinglyLinkedList() {
 		// 구현
-
 		this.head = new Node(-1);
 		this.tail = new Node(-1);
 		this.size = 0;
@@ -98,13 +97,24 @@ public class SinglyLinkedList {
 	 */
 	public int getFirst() {
 		// 구현
-		return this.head.data;
+		if (size()==0){
+			return -1;
+		}
+		return this.head.getNext().data;
 	}
 	
 	/* [필수] getLast() */
+//	O(n)
 	public int getLast() {
 		// 구현
-		return this.tail.data;
+		if (size()==0){
+			return -1;
+		}
+		Node last = head;
+		for(int i = 0; i<size();i++){
+			last = last.getNext();
+		}
+		return last.data;
 	}
 	
 	/* 
